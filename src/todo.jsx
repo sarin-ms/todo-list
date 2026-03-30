@@ -43,47 +43,60 @@ function ToDoList() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-center text-6xl font-bold mb-6">TODO LIST</h1>
+    <div className="app-shell">
+      <div className="bg-pattern" aria-hidden="true" />
 
-      <div className="flex items-center gap-2 mb-6">
-        <input
-          className="border border-gray-700 p-2 rounded"
-          type="text"
-          placeholder="Enter a task"
-          value={newTask}
-          onChange={handleInputChange}
-        />
-        <button className="border border-gray-700 p-2 rounded" onClick={addTask}>
-          Add
-        </button>
-      </div>
+      <main className="todo-panel">
+        <header className="hero">
+          <h1>TODO LIST</h1>
+        </header>
 
-      <ol className="space-y-2">
-        {tasks.map((task, index) => (
-          <li key={index}>
-            <span>{task}</span>
-            <button
-              className="border border-gray-700 ml-2 mr-2 p-2"
-              onClick={() => deleteTask(index)}
-            >
-              Delete
-            </button>
-            <button
-              className="border border-gray-700 ml-2 mr-2 p-2"
-              onClick={() => movetaskUp(index)}
-            >
-              Up
-            </button>
-            <button
-              className="border border-gray-700 ml-2 mr-2 p-2"
-              onClick={() => movetaskDown(index)}
-            >
-              Down
-            </button>
-          </li>
-        ))}
-      </ol>
+        <div className="composer">
+          <input
+            className="task-input"
+            type="text"
+            placeholder="What needs to get done?"
+            value={newTask}
+            onChange={handleInputChange}
+            onKeyDown={(e) => e.key === "Enter" && addTask()}
+          />
+          <button className="btn btn-add" onClick={addTask}>
+            Add Task
+          </button>
+        </div>
+
+        <ol className="task-list">
+          {tasks.length === 0 ? (
+            <li className="empty-state"> Add your first task!</li>
+          ) : (
+            tasks.map((task, index) => (
+              <li key={index} className="task-item">
+                <span className="task-text">{task}</span>
+
+                <div className="task-actions">
+                  <button className="btn btn-delete" onClick={() => deleteTask(index)}>
+                    Delete
+                  </button>
+                  <button
+                    className="btn btn-up"
+                    onClick={() => movetaskUp(index)}
+                    disabled={index === 0}
+                  >
+                    Up
+                  </button>
+                  <button
+                    className="btn btn-down"
+                    onClick={() => movetaskDown(index)}
+                    disabled={index === tasks.length - 1}
+                  >
+                    Down
+                  </button>
+                </div>
+              </li>
+            ))
+          )}
+        </ol>
+      </main>
     </div>
   );
 }
